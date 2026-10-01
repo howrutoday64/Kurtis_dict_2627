@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英文生字學習與串字挑戰</title>
+  <style>
+    :root {
+      --primary: #4A90E2;
+      --secondary: #FF9F43;
+      --success: #2ECC71;
+      --bg: #F0F4F8;
+      --card-bg: #FFFFFF;
+      --text: #2C3E50;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Fredoka', 'Segoe UI', Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 15px;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    h1 {
+      margin: 5px 0;
+      color: #34495E;
+      font-size: 1.8rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      justify-content: center;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      background: #CBD5E1;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+    }
+
+    .view-content {
+      display: none;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .view-content.active {
+      display: block;
+    }
+
+    /* Flashcard Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border: 2px solid #E2E8F0;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .card.sentence-card {
+      grid-column: 1 / -1;
+      background: #F8FAFC;
+      border-color: #CBD5E1;
+    }
+
+    .icon {
+      font-size: 3rem;
+      margin-bottom: 5px;
+    }
+
+    .word {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 2px;
+    }
+
+    .word-letters {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 8px;
+    }
+
+    .letter-span {
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .letter-span.active {
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    .translation {
+      font-size: 0.95rem;
+      color: #64748B;
+      margin-bottom: 12px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background 0.2s;
+    }
+
+    .btn-read {
+      background: #E0F2FE;
+      color: #0284C7;
+    }
+
+    .btn-read:hover {
+      background: #BAE6FD;
+    }
+
+    .btn-spell {
+      background: #FEF3C7;
+      color: #D97706;
+    }
+
+    .btn-spell:hover {
+      background: #FDE68A;
+    }
+
+    /* Game View */
+    .game-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .stars {
+      color: var(--secondary);
+    }
+
+    .game-icon {
+      font-size: 5rem;
+    }
+
+    .answer-slots {
+      display: flex;
+      gap: 8px;
+      margin: 15px 0;
+      min-height: 50px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .slot {
+      width: 42px;
+      height: 48px;
+      border-bottom: 3px solid var(--primary);
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: lowercase;
+    }
+
+    .tiles-container {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 500px;
+    }
+
+    .tile {
+      width: 45px;
+      height: 48px;
+      background: var(--primary);
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #2563EB;
+      user-select: none;
+      transition: all 0.1s;
+      text-transform: lowercase;
+    }
+
+    .tile:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #2563EB;
+    }
+
+    .tile.used {
+      opacity: 0.2;
+      pointer-events: none;
+      box-shadow: none;
+    }
+
+    .game-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .game-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-reset {
+      background: #F1F5F9;
+      color: #64748B;
+    }
+
+    .btn-next {
+      background: var(--success);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🎈 英文生字與句型學習</h1>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('learn')">📖 學習卡</button>
+    <button class="tab-btn" onclick="switchTab('game')">🎮 串字挑戰</button>
+  </div>
+
+  <!-- VIEW 1: LEARN FLASHCARDS -->
+  <div id="learnView" class="view-content active">
+    <div class="grid" id="cardGrid"></div>
+  </div>
+
+  <!-- VIEW 2: SPELLING GAME -->
+  <div id="gameView" class="view-content">
+    <div class="game-card">
+      <div class="game-header">
+        <span id="gameProgress">進度: 1 / 10</span>
+        <span class="stars" id="starCount">⭐ 0</span>
+      </div>
+
+      <div class="game-icon" id="gameIcon">🧸</div>
+      <div id="gameTranslation" style="color: #64748B; font-size: 1.1rem;"></div>
+
+      <button class="action-btn btn-read" style="width: auto; padding: 8px 16px;" onclick="playCurrentGameWordSound()">
+        🔊 聽讀音
+      </button>
+
+      <div class="answer-slots" id="answerSlots"></div>
+      <div class="tiles-container" id="tilesContainer"></div>
+
+      <div class="game-controls">
+        <button class="game-btn btn-reset" onclick="resetGameWord()">🔄 清除</button>
+        <button class="game-btn btn-next" id="nextBtn" style="display: none;" onclick="nextGameWord()">下一題 ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const vocabulary = [
+      { word: "toys", icon: "🧸", translation: "玩具" },
+      { word: "doll", icon: "🪆", translation: "洋娃娃" },
+      { word: "car", icon: "🚗", translation: "玩具車" },
+      { word: "train", icon: "🚂", translation: "火車" },
+      { word: "gun", icon: "🔫", translation: "玩具槍" },
+      { word: "dinosaur", icon: "🦖", translation: "恐龍" },
+      { word: "bus", icon: "🚌", translation: "巴士" },
+      { word: "blocks", icon: "🧱", translation: "積木" },
+      { word: "plane", icon: "✈️", translation: "飛機" },
+      { word: "ball", icon: "⚽", translation: "波/球" },
+      { word: "This is my teddy bear.", icon: "🧸", translation: "這是我的泰迪熊。", isSentence: true },
+      { word: "What colour is the robot?", icon: "🤖", translation: "機器人是什麼顏色的？", isSentence: true }
+    ];
+
+    const wordsOnly = vocabulary.filter(v => !v.isSentence);
+
+    // Speech Synthesis Helper
+    function speak(text, rate = 0.9) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = rate;
+      window.speechSynthesis.speak(utterance);
+      return utterance;
+    }
+
+    // Render Flashcards
+    function renderCards() {
+      const grid = document.getElementById('cardGrid');
+      grid.innerHTML = '';
+
+      vocabulary.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = `card ${item.isSentence ? 'sentence-card' : ''}`;
+
+        const lettersHtml = item.word.split('').map((char, lIdx) => 
+          `<span class="letter-span" id="span-${index}-${lIdx}">${char}</span>`
+        ).join('');
+
+        card.innerHTML = `
+          <div class="icon">${item.icon}</div>
+          <div class="word">
+            <div class="word-letters">${lettersHtml}</div>
+          </div>
+          <div class="translation">${item.translation}</div>
+          <div class="btn-group">
+            <button class="action-btn btn-read" onclick="readWord('${item.word.replace(/'/g, "\\'")}')">
+              🔊 讀音
+            </button>
+            ${!item.isSentence ? `
+              <button class="action-btn btn-spell" onclick="spellWord(${index})">
+                🔤 串字
+              </button>
+            ` : ''}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function readWord(text) {
+      speak(text, 0.85);
+    }
+
+    // Spell Word Letter by Letter strictly pronouncing lower-case letter sounds (No "Capital")
+    async function spellWord(cardIdx) {
+      const item = vocabulary[cardIdx];
+      const word = item.word;
+      window.speechSynthesis.cancel();
+
+      for (let i = 0; i < word.length; i++) {
+        const letterSpan = document.getElementById(`span-${cardIdx}-${i}`);
+        if (letterSpan) letterSpan.classList.add('active');
+
+        // Force lowercase letter sound to prevent speech synthesis from saying "capital"
+        const cleanLetter = word[i].toLowerCase();
+        
+        await new Promise((resolve) => {
+          const u = new SpeechSynthesisUtterance(cleanLetter);
+          u.lang = 'en-US';
+          u.rate = 0.7;
+          u.onend = resolve;
+          u.onerror = resolve;
+          window.speechSynthesis.speak(u);
+        });
+
+        if (letterSpan) letterSpan.classList.remove('active');
+        await new Promise(r => setTimeout(r, 100));
+      }
+
+      // Read whole word at the end
+      speak(word, 0.85);
+    }
+
+    // Tab Switching
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active'));
+
+      if (tab === 'learn') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('learnView').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('gameView').classList.add('active');
+        initGame();
+      }
+    }
+
+    // Game Logic
+    let currentGameIndex = 0;
+    let stars = 0;
+    let currentInput = [];
+    let currentScrambled = [];
+
+    function initGame() {
+      currentGameIndex = 0;
+      stars = 0;
+      document.getElementById('starCount').textContent = `⭐ ${stars}`;
+      loadGameQuestion();
+    }
+
+    function loadGameQuestion() {
+      const current = wordsOnly[currentGameIndex];
+      document.getElementById('gameProgress').textContent = `進度: ${currentGameIndex + 1} / ${wordsOnly.length}`;
+      document.getElementById('gameIcon').textContent = current.icon;
+      document.getElementById('gameTranslation').textContent = current.translation;
+      document.getElementById('nextBtn').style.display = 'none';
+
+      currentInput = [];
+      
+      // Prepare answer slots
+      const slotsContainer = document.getElementById('answerSlots');
+      slotsContainer.innerHTML = '';
+      for (let i = 0; i < current.word.length; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'slot';
+        slot.id = `slot-${i}`;
+        slotsContainer.appendChild(slot);
+      }
+
+      // Prepare scrambled tiles
+      const letters = current.word.toLowerCase().split('');
+      currentScrambled = [...letters].sort(() => Math.random() - 0.5);
+
+      const tilesContainer = document.getElementById('tilesContainer');
+      tilesContainer.innerHTML = '';
+      currentScrambled.forEach((char, idx) => {
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        tile.textContent = char;
+        tile.id = `tile-${idx}`;
+        tile.onclick = () => selectTile(char, idx);
+        tilesContainer.appendChild(tile);
+      });
+
+      playCurrentGameWordSound();
+    }
+
+    function playCurrentGameWordSound() {
+      speak(wordsOnly[currentGameIndex].word, 0.85);
+    }
+
+    function selectTile(char, tileIdx) {
+      const targetWord = wordsOnly[currentGameIndex].word.toLowerCase();
+      if (currentInput.length >= targetWord.length) return;
+
+      // Play clean letter sound
+      speak(char.toLowerCase(), 0.9);
+
+      currentInput.push({ char, tileIdx });
+      
+      // Update Slot
+      const slotIndex = currentInput.length - 1;
+      document.getElementById(`slot-${slotIndex}`).textContent = char;
+
+      // Disable Tile
+      document.getElementById(`tile-${tileIdx}`).classList.add('used');
+
+      // Check Word Completion
+      if (currentInput.length === targetWord.length) {
+        checkAnswer();
+      }
+    }
+
+    function resetGameWord() {
+      currentInput = [];
+      const slotsContainer = document.getElementById('answerSlots');
+      Array.from(slotsContainer.children).forEach(slot => slot.textContent = '');
+      
+      const tilesContainer = document.getElementById('tilesContainer');
+      Array.from(tilesContainer.children).forEach(tile => tile.classList.remove('used'));
+    }
+
+    function checkAnswer() {
+      const targetWord = wordsOnly[currentGameIndex].word.toLowerCase();
+      const userWord = currentInput.map(i => i.char).join('');
+
+      if (userWord === targetWord) {
+        stars += 10;
+        document.getElementById('starCount').textContent = `⭐ ${stars}`;
+        speak(`Excellent! ${targetWord}`, 0.9);
+        document.getElementById('nextBtn').style.display = 'inline-block';
+      } else {
+        speak("Try again!", 0.9);
+        setTimeout(resetGameWord, 800);
+      }
+    }
+
+    function nextGameWord() {
+      if (currentGameIndex < wordsOnly.length - 1) {
+        currentGameIndex++;
+        loadGameQuestion();
+      } else {
+        alert(`🎉 恭喜完成所有挑戰！總得分：${stars} 分！`);
+        initGame();
+      }
+    }
+
+    // Initialize
+    renderCards();
+  </script>
+</body>
+</html>
