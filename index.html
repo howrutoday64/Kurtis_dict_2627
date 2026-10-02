@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>寶可夢與小動物英文生字大冒險 ⚡</title>
+  <title>寶可夢與可愛動物生字大冒險 ⚡</title>
   <style>
     :root {
       --poke-red: #FF5350;
@@ -424,7 +424,7 @@
     const praiseWords = ["Great!", "Well done!", "Good job!", "Nice!", "Stunning!", "Excellent!"];
     const wordsOnly = vocabulary.filter(v => !v.isSentence);
 
-    // Promise-based single letter playback to guarantee sound completion
+    // Single letter audio promise to guarantee speech completion
     function speakLetterPromise(letter) {
       return new Promise((resolve) => {
         window.speechSynthesis.cancel();
@@ -527,7 +527,7 @@
     let currentGameIndex = 0;
     let pokeballs = 0;
     let currentInput = [];
-    let currentScrambled = [];
+    let isChecking = false;
 
     function initGame() {
       currentGameIndex = 0;
@@ -545,7 +545,8 @@
       document.getElementById('nextBtn').style.display = 'none';
 
       currentInput = [];
-      
+      isChecking = false;
+
       // Prepare answer slots
       const slotsContainer = document.getElementById('answerSlots');
       slotsContainer.innerHTML = '';
@@ -558,11 +559,11 @@
 
       // Prepare scrambled tiles
       const letters = current.word.toLowerCase().split('');
-      currentScrambled = [...letters].sort(() => Math.random() - 0.5);
+      const scrambled = [...letters].sort(() => Math.random() - 0.5);
 
       const tilesContainer = document.getElementById('tilesContainer');
       tilesContainer.innerHTML = '';
-      currentScrambled.forEach((char, idx) => {
+      scrambled.forEach((char, idx) => {
         const tile = document.createElement('div');
         tile.className = 'tile';
         tile.textContent = char;
@@ -579,27 +580,31 @@
     }
 
     async function selectTile(char, tileIdx) {
+      if (isChecking) return;
+
       const targetWord = wordsOnly[currentGameIndex].word.toLowerCase();
       if (currentInput.length >= targetWord.length) return;
 
       currentInput.push({ char, tileIdx });
       
-      // Update Slot & Disable Tile
+      // Fill Slot & Disable Tile
       const slotIndex = currentInput.length - 1;
       document.getElementById(`slot-${slotIndex}`).textContent = char;
       document.getElementById(`tile-${tileIdx}`).classList.add('used');
 
-      // Wait until the clicked letter's audio fully finishes
+      // Play the single letter sound
       await speakLetterPromise(char);
 
-      // Check Word Completion after last letter audio finishes
+      // ONLY when the user completes ALL letters of the word, trigger checkAnswer
       if (currentInput.length === targetWord.length) {
+        isChecking = true;
         checkAnswer();
       }
     }
 
     function resetGameWord() {
       currentInput = [];
+      isChecking = false;
       const slotsContainer = document.getElementById('answerSlots');
       Array.from(slotsContainer.children).forEach(slot => slot.textContent = '');
       
@@ -611,11 +616,14 @@
       const targetWord = wordsOnly[currentGameIndex].word.toLowerCase();
       const userWord = currentInput.map(i => i.char).join('');
 
+      // Extra delay buffer to guarantee 100% full word spelling completion before praising
+      await new Promise(r => setTimeout(r, 150));
+
       if (userWord === targetWord) {
         pokeballs += 1;
         document.getElementById('starCount').textContent = `🔴 精靈球: ${pokeballs}`;
         
-        // Random positive praise spoken AFTER the final letter completes
+        // Praise ONLY AFTER complete word spelled correctly
         const randomPraise = praiseWords[Math.floor(Math.random() * praiseWords.length)];
         await speakTextPromise(randomPraise, 0.95);
 
