@@ -3,178 +3,216 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>寶可夢與可愛動物生字大冒險 ⚡</title>
+  <title>字學貓樂園 🐱✨</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Fredoka:wght@600;700&display=swap');
+
     :root {
-      --poke-red: #FF5350;
-      --poke-yellow: #FFCE31;
-      --poke-blue: #38A1F3;
-      --poke-green: #2ECC71;
-      --bg-color: #F0F7FF;
-      --card-bg: #FFFFFF;
-      --text-color: #2D3748;
+      --gold-light: #FFE8A3;
+      --gold-primary: #DFB253;
+      --gold-dark: #9A7025;
+      --night-bg: #091326;
+      --card-bg: rgba(15, 28, 54, 0.9);
+      --border-color: #D4AF37;
+      --text-gold: #FFF0C2;
+      --text-white: #FFFFFF;
     }
 
     * {
       box-sizing: border-box;
-      font-family: 'Fredoka', 'Segoe UI', Arial, sans-serif;
+      font-family: 'Fredoka', 'Cinzel', 'Microsoft JhengHei', sans-serif;
     }
 
     body {
       margin: 0;
       padding: 15px;
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      background: radial-gradient(circle at center, #162447 0%, #091326 100%);
+      color: var(--text-gold);
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      background-image: radial-gradient(#CBD5E1 1.5px, transparent 1.5px);
-      background-size: 24px 24px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Background stars */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #ffd700, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 160px 120px, #ffd700, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      opacity: 0.6;
+      pointer-events: none;
     }
 
     header {
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       width: 100%;
       max-width: 800px;
+      position: relative;
+      z-index: 10;
     }
 
-    .title-box {
-      background: linear-gradient(135deg, #FF6B6B, #FF8E53);
-      color: white;
-      padding: 16px 20px;
-      border-radius: 24px;
-      box-shadow: 0 8px 0 #D93838, 0 10px 20px rgba(0,0,0,0.1);
-      border: 4px solid #2D3748;
-      display: inline-block;
-      width: 100%;
+    .title-banner {
+      background: linear-gradient(180deg, #1E2D4A 0%, #0F1C36 100%);
+      border: 3px solid var(--gold-primary);
+      border-radius: 25px;
+      padding: 15px 25px;
+      box-shadow: 0 0 20px rgba(223, 178, 83, 0.4), inset 0 0 15px rgba(223, 178, 83, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      position: relative;
+    }
+
+    .cat-mascot {
+      font-size: 3.2rem;
+      filter: drop-shadow(0 0 10px rgba(255, 232, 163, 0.8));
     }
 
     h1 {
       margin: 0;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-      text-shadow: 2px 2px 0 #2D3748;
-      color: var(--poke-yellow);
+      font-size: 2rem;
+      color: var(--gold-light);
+      text-shadow: 0 0 10px rgba(223, 178, 83, 0.8), 2px 2px 4px #000;
+      letter-spacing: 2px;
     }
 
     .subtitle {
-      font-size: 1rem;
-      margin-top: 5px;
-      font-weight: 700;
+      font-size: 0.95rem;
+      color: #A0AEC0;
+      margin-top: 4px;
     }
 
     .tabs {
       display: flex;
-      gap: 12px;
-      margin: 15px 0;
-      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
       width: 100%;
       max-width: 800px;
+      z-index: 10;
     }
 
     .tab-btn {
       flex: 1;
       padding: 12px;
       font-size: 1.1rem;
-      font-weight: 800;
-      border: 3px solid #2D3748;
+      font-weight: 700;
+      border: 2px solid var(--gold-primary);
       border-radius: 18px;
-      background: #E2E8F0;
-      color: #4A5568;
+      background: linear-gradient(180deg, #1A263F 0%, #0D1629 100%);
+      color: var(--text-gold);
       cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       transition: all 0.2s;
-      box-shadow: 0 5px 0 #2D3748;
     }
 
     .tab-btn.active {
-      background: var(--poke-yellow);
-      color: #2D3748;
-      box-shadow: 0 5px 0 #2D3748;
-    }
-
-    .tab-btn:active {
-      transform: translateY(3px);
-      box-shadow: 0 2px 0 #2D3748;
+      background: linear-gradient(180deg, #DFB253 0%, #9A7025 100%);
+      color: #091326;
+      box-shadow: 0 0 15px rgba(223, 178, 83, 0.6);
     }
 
     .view-content {
       display: none;
       width: 100%;
       max-width: 800px;
+      z-index: 10;
     }
 
     .view-content.active {
       display: block;
     }
 
-    /* Flashcard Grid */
+    /* Grid Layout */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-      gap: 16px;
+      gap: 18px;
     }
 
     .card {
       background: var(--card-bg);
-      border-radius: 22px;
-      padding: 16px;
+      border: 2px solid var(--gold-primary);
+      border-radius: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 6px 0 #CBD5E1;
-      border: 3px solid #2D3748;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(223, 178, 83, 0.1);
       position: relative;
     }
 
+    /* Fix sentence card layout & line breaks */
     .card.sentence-card {
       grid-column: 1 / -1;
-      background: #FFFBEB;
+      background: linear-gradient(180deg, rgba(26, 42, 74, 0.95) 0%, rgba(13, 24, 46, 0.95) 100%);
+      border-color: var(--gold-light);
+      padding: 22px;
+      text-align: center;
     }
 
-    .pokemon-badge {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      font-size: 1.2rem;
+    .card.sentence-card .word {
+      font-size: 1.5rem;
+      line-height: 1.6;
+      word-break: break-word;
+      white-space: normal;
+    }
+
+    .card.sentence-card .word-letters {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 8px;
     }
 
     .icon {
       font-size: 3.5rem;
-      margin-bottom: 5px;
-      filter: drop-shadow(0 4px 0 rgba(0,0,0,0.1));
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 8px rgba(255, 232, 163, 0.5));
     }
 
     .word {
       font-size: 1.4rem;
-      font-weight: 800;
-      color: #2B6CB0;
-      margin-bottom: 2px;
+      font-weight: bold;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+      text-align: center;
     }
 
     .word-letters {
       display: flex;
       gap: 2px;
       margin-bottom: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .letter-span {
-      padding: 2px 5px;
-      border-radius: 6px;
-      font-weight: 800;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background 0.15s;
     }
 
     .letter-span.active {
-      background-color: var(--poke-red);
-      color: white;
+      background-color: var(--gold-primary);
+      color: #091326;
     }
 
     .translation {
-      font-size: 0.95rem;
-      color: #718096;
-      font-weight: 700;
+      font-size: 1rem;
+      color: #CBD5E1;
       margin-bottom: 12px;
+      text-align: center;
     }
 
     .btn-group {
@@ -185,48 +223,45 @@
 
     .action-btn {
       flex: 1;
-      padding: 8px 10px;
-      border: 2px solid #2D3748;
+      padding: 10px;
+      border: 1px solid var(--gold-primary);
       border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 800;
+      font-size: 0.95rem;
+      font-weight: bold;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      box-shadow: 0 3px 0 #2D3748;
-      transition: all 0.1s;
-    }
-
-    .action-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 #2D3748;
+      gap: 6px;
+      transition: all 0.2s;
     }
 
     .btn-read {
-      background: #EBF8FF;
-      color: #2B6CB0;
+      background: linear-gradient(180deg, #2B4C7E 0%, #1A3053 100%);
+      color: var(--text-gold);
     }
 
     .btn-spell {
-      background: #FEFCBF;
-      color: #D69E2E;
+      background: linear-gradient(180deg, #8A6518 0%, #543D0A 100%);
+      color: var(--gold-light);
+    }
+
+    .action-btn:active {
+      transform: scale(0.96);
     }
 
     /* Game View */
     .game-card {
       background: var(--card-bg);
-      border-radius: 28px;
+      border: 3px solid var(--gold-primary);
+      border-radius: 25px;
       padding: 25px;
-      box-shadow: 0 8px 0 #2D3748;
-      border: 4px solid #2D3748;
+      box-shadow: 0 0 25px rgba(223, 178, 83, 0.3);
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 15px;
-      position: relative;
     }
 
     .game-header {
@@ -234,38 +269,23 @@
       justify-content: space-between;
       width: 100%;
       font-size: 1.1rem;
-      font-weight: 800;
-      background: #EDF2F7;
+      font-weight: bold;
+      background: rgba(255, 255, 255, 0.05);
       padding: 10px 18px;
-      border-radius: 16px;
-      border: 2px solid #2D3748;
-    }
-
-    .pokemon-avatar-box {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-top: 10px;
-    }
-
-    .poke-avatar {
-      font-size: 3rem;
-      background: #FFF5F5;
-      padding: 10px;
-      border-radius: 50%;
-      border: 3px solid #2D3748;
-      box-shadow: 0 4px 0 #2D3748;
+      border-radius: 15px;
+      border: 1px solid var(--gold-dark);
     }
 
     .game-icon {
-      font-size: 4.5rem;
-      filter: drop-shadow(0 6px 0 rgba(0,0,0,0.15));
+      font-size: 5rem;
+      margin-top: 10px;
+      filter: drop-shadow(0 0 15px rgba(255, 232, 163, 0.6));
     }
 
     .answer-slots {
       display: flex;
       gap: 8px;
-      margin: 10px 0;
+      margin: 15px 0;
       min-height: 55px;
       flex-wrap: wrap;
       justify-content: center;
@@ -274,10 +294,10 @@
     .slot {
       width: 45px;
       height: 52px;
-      border-bottom: 4px solid #2B6CB0;
-      font-size: 1.9rem;
-      font-weight: 800;
-      color: #2B6CB0;
+      border-bottom: 3px solid var(--gold-primary);
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--gold-light);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -295,79 +315,75 @@
     .tile {
       width: 48px;
       height: 52px;
-      background: var(--poke-yellow);
-      color: #2D3748;
-      font-size: 1.6rem;
-      font-weight: 800;
-      border-radius: 14px;
-      border: 3px solid #2D3748;
+      background: linear-gradient(180deg, #DFB253 0%, #9A7025 100%);
+      color: #091326;
+      font-size: 1.7rem;
+      font-weight: bold;
+      border-radius: 12px;
+      border: 1px solid var(--gold-light);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 0 #2D3748;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
       user-select: none;
-      transition: all 0.1s;
+      transition: all 0.15s;
       text-transform: lowercase;
     }
 
     .tile:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 #2D3748;
+      transform: translateY(2px);
     }
 
     .tile.used {
-      opacity: 0.2;
+      opacity: 0.25;
       pointer-events: none;
       box-shadow: none;
-      border-color: #A0AEC0;
     }
 
     .game-controls {
       display: flex;
-      gap: 12px;
+      gap: 15px;
       margin-top: 10px;
     }
 
     .game-btn {
-      padding: 12px 24px;
-      border: 3px solid #2D3748;
-      border-radius: 16px;
+      padding: 12px 28px;
+      border: 2px solid var(--gold-primary);
+      border-radius: 15px;
       font-size: 1rem;
-      font-weight: 800;
+      font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 0 #2D3748;
-      transition: all 0.1s;
-    }
-
-    .game-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #2D3748;
+      transition: all 0.2s;
     }
 
     .btn-reset {
-      background: #EDF2F7;
-      color: #4A5568;
+      background: rgba(255, 255, 255, 0.1);
+      color: #CBD5E1;
     }
 
     .btn-next {
-      background: var(--poke-green);
+      background: linear-gradient(180deg, #2ECC71 0%, #27AE60 100%);
       color: white;
+      box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="title-box">
-      <h1>⚡ 寶可夢與可愛動物生字冒險 ⚡</h1>
-      <div class="subtitle">🐾 一起學習英文生字，捕捉寶可夢！ 🐾</div>
+    <div class="title-banner">
+      <div class="cat-mascot">🐱✨</div>
+      <div>
+        <h1>字學貓樂園</h1>
+        <div class="subtitle">魔法學堂：聽讀音・學串字・探索生字卡</div>
+      </div>
     </div>
   </header>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('learn')">📖 圖鑑學習卡</button>
-    <button class="tab-btn" onclick="switchTab('game')">🎮 精靈球捕捉挑戰</button>
+    <button class="tab-btn active" onclick="switchTab('learn')">📖 生字卡圖鑑</button>
+    <button class="tab-btn" onclick="switchTab('game')">🎮 魔法串字挑戰</button>
   </div>
 
   <!-- VIEW 1: LEARN FLASHCARDS -->
@@ -379,18 +395,14 @@
   <div id="gameView" class="view-content">
     <div class="game-card">
       <div class="game-header">
-        <span id="gameProgress">捕捉進度: 1 / 10</span>
-        <span class="stars" id="starCount">🔴 精靈球: 0</span>
+        <span id="gameProgress">挑戰進度: 1 / 10</span>
+        <span class="stars" id="starCount">⭐ 魔法星: 0</span>
       </div>
 
-      <div class="pokemon-avatar-box">
-        <div class="poke-avatar" id="pokePartner">⚡</div>
-        <div class="game-icon" id="gameIcon">🧸</div>
-      </div>
+      <div class="game-icon" id="gameIcon">🧸</div>
+      <div id="gameTranslation" style="color: var(--gold-light); font-size: 1.2rem; font-weight: bold;"></div>
 
-      <div id="gameTranslation" style="color: #4A5568; font-size: 1.15rem; font-weight: 800;"></div>
-
-      <button class="action-btn btn-read" style="width: auto; padding: 8px 20px; font-size: 1rem;" onclick="playCurrentGameWordSound()">
+      <button class="action-btn btn-read" style="width: auto; padding: 8px 22px; font-size: 1rem;" onclick="playCurrentGameWordSound()">
         🔊 聽聽發音
       </button>
 
@@ -398,7 +410,7 @@
       <div class="tiles-container" id="tilesContainer"></div>
 
       <div class="game-controls">
-        <button class="game-btn btn-reset" onclick="resetGameWord()">🔄 重來</button>
+        <button class="game-btn btn-reset" onclick="resetGameWord()">🔄 清除</button>
         <button class="game-btn btn-next" id="nextBtn" style="display: none;" onclick="nextGameWord()">下一題 ➔</button>
       </div>
     </div>
@@ -406,25 +418,24 @@
 
   <script>
     const vocabulary = [
-      { word: "toys", icon: "🧸", translation: "玩具", pokemon: "皮卡丘 ⚡" },
-      { word: "doll", icon: "🪆", translation: "洋娃娃", pokemon: "伊布 🦊" },
-      { word: "car", icon: "🚗", translation: "玩具車", pokemon: "小火龍 🐉" },
-      { word: "train", icon: "🚂", translation: "火車", pokemon: "傑尼龜 🐢" },
-      { word: "gun", icon: "🔫", translation: "玩具槍", pokemon: "妙蛙種子 🍃" },
-      { word: "dinosaur", icon: "🦖", translation: "恐龍", pokemon: "卡比獸 🐻" },
-      { word: "bus", icon: "🚌", translation: "巴士", pokemon: "胖丁 🎤" },
-      { word: "blocks", icon: "🧱", translation: "積木", pokemon: "可達鴨 🦆" },
-      { word: "plane", icon: "✈️", translation: "飛機", pokemon: "波克比 🥚" },
-      { word: "ball", icon: "⚽", translation: "波/球", pokemon: "喵喵 🐱" },
-      { word: "This is my teddy bear.", icon: "🧸", translation: "這是我的泰迪熊。", isSentence: true, pokemon: "皮卡丘 ⚡" },
-      { word: "What colour is the robot?", icon: "🤖", translation: "機器人是什麼顏色的？", isSentence: true, pokemon: "伊布 🦊" }
+      { word: "toys", icon: "🧸", translation: "玩具" },
+      { word: "doll", icon: "🪆", translation: "洋娃娃" },
+      { word: "car", icon: "🚗", translation: "玩具車" },
+      { word: "train", icon: "🚂", translation: "火車" },
+      { word: "gun", icon: "🔫", translation: "玩具槍" },
+      { word: "dinosaur", icon: "🦖", translation: "恐龍" },
+      { word: "bus", icon: "🚌", translation: "巴士" },
+      { word: "blocks", icon: "🧱", translation: "積木" },
+      { word: "plane", icon: "✈️", translation: "飛機" },
+      { word: "ball", icon: "⚽", translation: "波/球" },
+      { word: "This is my teddy bear.", icon: "🧸", translation: "這是我的泰迪熊。", isSentence: true },
+      { word: "What colour is the robot?", icon: "🤖", translation: "機器人是什麼顏色的？", isSentence: true }
     ];
 
-    const pokemonPartners = ["⚡", "🦊", "🐉", "🐢", "🍃", "🐻", "🎤", "🦆", "🥚", "🐱"];
     const praiseWords = ["Great!", "Well done!", "Good job!", "Nice!", "Stunning!", "Excellent!"];
     const wordsOnly = vocabulary.filter(v => !v.isSentence);
 
-    // Single letter audio promise to guarantee speech completion
+    // Audio helpers with Promises to ensure complete speech playback
     function speakLetterPromise(letter) {
       return new Promise((resolve) => {
         window.speechSynthesis.cancel();
@@ -449,7 +460,7 @@
       });
     }
 
-    // Render Flashcards
+    // Render Cards
     function renderCards() {
       const grid = document.getElementById('cardGrid');
       grid.innerHTML = '';
@@ -463,7 +474,6 @@
         ).join('');
 
         card.innerHTML = `
-          <div class="pokemon-badge">${item.pokemon.split(' ')[1]}</div>
           <div class="icon">${item.icon}</div>
           <div class="word">
             <div class="word-letters">${lettersHtml}</div>
@@ -488,7 +498,6 @@
       speakTextPromise(text, 0.85);
     }
 
-    // Spell Word Letter by Letter strictly pronouncing lower-case letter sounds (No "Capital")
     async function spellWord(cardIdx) {
       const item = vocabulary[cardIdx];
       const word = item.word;
@@ -504,11 +513,9 @@
         await new Promise(r => setTimeout(r, 120));
       }
 
-      // Read whole word after all letters finish
       await speakTextPromise(word, 0.85);
     }
 
-    // Tab Switching
     function switchTab(tab) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active'));
@@ -523,23 +530,22 @@
       }
     }
 
-    // Game Logic
+    // Game Variables
     let currentGameIndex = 0;
-    let pokeballs = 0;
+    let stars = 0;
     let currentInput = [];
     let isChecking = false;
 
     function initGame() {
       currentGameIndex = 0;
-      pokeballs = 0;
-      document.getElementById('starCount').textContent = `🔴 精靈球: ${pokeballs}`;
+      stars = 0;
+      document.getElementById('starCount').textContent = `⭐ 魔法星: ${stars}`;
       loadGameQuestion();
     }
 
     function loadGameQuestion() {
       const current = wordsOnly[currentGameIndex];
-      document.getElementById('gameProgress').textContent = `捕捉進度: ${currentGameIndex + 1} / ${wordsOnly.length}`;
-      document.getElementById('pokePartner').textContent = pokemonPartners[currentGameIndex % pokemonPartners.length];
+      document.getElementById('gameProgress').textContent = `挑戰進度: ${currentGameIndex + 1} / ${wordsOnly.length}`;
       document.getElementById('gameIcon').textContent = current.icon;
       document.getElementById('gameTranslation').textContent = current.translation;
       document.getElementById('nextBtn').style.display = 'none';
@@ -547,7 +553,6 @@
       currentInput = [];
       isChecking = false;
 
-      // Prepare answer slots
       const slotsContainer = document.getElementById('answerSlots');
       slotsContainer.innerHTML = '';
       for (let i = 0; i < current.word.length; i++) {
@@ -557,7 +562,6 @@
         slotsContainer.appendChild(slot);
       }
 
-      // Prepare scrambled tiles
       const letters = current.word.toLowerCase().split('');
       const scrambled = [...letters].sort(() => Math.random() - 0.5);
 
@@ -587,15 +591,12 @@
 
       currentInput.push({ char, tileIdx });
       
-      // Fill Slot & Disable Tile
       const slotIndex = currentInput.length - 1;
       document.getElementById(`slot-${slotIndex}`).textContent = char;
       document.getElementById(`tile-${tileIdx}`).classList.add('used');
 
-      // Play the single letter sound
       await speakLetterPromise(char);
 
-      // ONLY when the user completes ALL letters of the word, trigger checkAnswer
       if (currentInput.length === targetWord.length) {
         isChecking = true;
         checkAnswer();
@@ -616,14 +617,12 @@
       const targetWord = wordsOnly[currentGameIndex].word.toLowerCase();
       const userWord = currentInput.map(i => i.char).join('');
 
-      // Extra delay buffer to guarantee 100% full word spelling completion before praising
       await new Promise(r => setTimeout(r, 150));
 
       if (userWord === targetWord) {
-        pokeballs += 1;
-        document.getElementById('starCount').textContent = `🔴 精靈球: ${pokeballs}`;
+        stars += 10;
+        document.getElementById('starCount').textContent = `⭐ 魔法星: ${stars}`;
         
-        // Praise ONLY AFTER complete word spelled correctly
         const randomPraise = praiseWords[Math.floor(Math.random() * praiseWords.length)];
         await speakTextPromise(randomPraise, 0.95);
 
@@ -639,7 +638,7 @@
         currentGameIndex++;
         loadGameQuestion();
       } else {
-        alert(`🎉 恭喜完成所有挑戰！成功收集 ${pokeballs} 個精靈球，成為寶可夢生字大師！`);
+        alert(`🎉 恭喜完成所有魔法挑戰！獲得總星數：${stars} 顆魔法星！`);
         initGame();
       }
     }
